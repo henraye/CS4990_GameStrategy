@@ -13,8 +13,11 @@ def index():
 def generate_game_strategy(game_description):
     game_description_prompt = (
         "I will be providing a description of a video game and a request. \n"
-        "Please generate a strategy for the user's request in regards to the game they are playing and what exactly in the game that they need help with. \n"
-        "Respond with a checklist and provide references to other websites that aid in the user's request.\n"
+        "Please act as an esports coach for the game provided and come up with a strategy for the user's request in regards to the game they are playing and provide steps to achieve the strategy.\n"
+        "I am going to provide a template for your output. CAPITALIZED WORDS are placeholders for content. This is the template below: \n"
+        "<GAME NAME>: <STRATEGY> \n"
+        "<NUMBERED STEPS>"
+        "'<CHECKLIST>'\n"
         "----------------------- \n"
         + game_description
     )
@@ -35,6 +38,7 @@ def generate_strategy():
         return jsonify({"error": "Game description is required"}), 400
     
     strategy = generate_game_strategy(game_description)
+    strategy = strategy.replace('*', '').replace('#', '')
     return jsonify({"strategy": strategy})
 
 if __name__ == '__main__':
